@@ -1,10 +1,7 @@
 <<<<<<< HEAD
-# GrowPlants
-Garden Planning &amp; Management Introduction: "GrowPlants" - A comprehensive gardening companion that helps plan, track, and maintain your garden throughout the seasons.
-=======
 # growplants
 
-A new Flutter project.
+Garden Planning &amp; Management Introduction: "GrowPlants" - A comprehensive gardening companion that helps plan, track, and maintain your garden throughout the seasons.
 
 ## Getting Started
 
