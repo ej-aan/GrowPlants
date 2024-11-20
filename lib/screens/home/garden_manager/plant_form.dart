@@ -22,13 +22,13 @@ class _PlantFormState extends State<PlantForm> {
     super.initState();
     name = widget.plant?.name ?? '';
     type = widget.plant?.type ?? '';
-    notes = widget.plant?.notes;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF8CB369),
         title: Text(widget.plant == null ? 'Add Plant' : 'Edit Plant'),
       ),
       body: Padding(
@@ -59,11 +59,6 @@ class _PlantFormState extends State<PlantForm> {
                 },
                 onSaved: (value) => type = value!,
               ),
-              TextFormField(
-                initialValue: notes,
-                decoration: const InputDecoration(labelText: 'Notes'),
-                onSaved: (value) => notes = value,
-              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _savePlant,
@@ -84,14 +79,11 @@ class _PlantFormState extends State<PlantForm> {
           id: DateTime.now().toString(),
           name: name,
           type: type,
-          notes: notes,
-          dateAdded: DateTime.now(),
         ));
       } else {
         widget.plant!
           ..name = name
-          ..type = type
-          ..notes = notes;
+          ..type = type;
         DataService().updatePlant(widget.plant!);
       }
       Navigator.pop(context);
