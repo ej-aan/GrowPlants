@@ -16,6 +16,8 @@ class MonitoringScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final categoryCounts = _getCategoryCounts(plants);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF8CB369),
@@ -31,13 +33,6 @@ class MonitoringScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Section Title
-            const Text(
-              'Garden Overview',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
             // Weather, Temperature, and Humidity Monitoring
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -62,18 +57,40 @@ class MonitoringScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-
-            // Total Plants Information
-            _buildTotalPlantsInfo(plants.length),
-            const SizedBox(height: 24),
-
-            // Plant List Section
-            const Text(
-              'Your Plants',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
             const SizedBox(height: 16),
+
+            // Grafik Batang Horizontal
+            const Text(
+              'Plant Categories',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 150,
+              child: HorizontalBarChart(categoryCounts: categoryCounts),
+            ),
+
+            const SizedBox(height: 0.1),
+
+            // Plant List Section with Total Plants
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Your Plants',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'Total: ${plants.length}', // Tambahkan total jumlah tanaman di sini
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
 
             // Plant List
             Expanded(
@@ -82,7 +99,7 @@ class MonitoringScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final plant = plants[index];
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 6.0),
+                    margin: const EdgeInsets.symmetric(vertical: 3.0),
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: _getCategoryColor(plant["category"]!),
@@ -124,7 +141,7 @@ class MonitoringScreen extends StatelessWidget {
   }) {
     return Flexible(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -167,46 +184,11 @@ class MonitoringScreen extends StatelessWidget {
     );
   }
 
-  // Widget for Total Plants Info
-  Widget _buildTotalPlantsInfo(int totalPlants) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F6F6),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 6,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            "Total Plants",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Text(
-            "$totalPlants",
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Helper function to get category icon
   Widget _getCategoryIcon(String category) {
     switch (category) {
       case "Vegetable":
-        return const Icon(Icons.local_florist, color: Colors.white);
+        return const Icon(Icons.eco, color: Colors.white);
       case "Herb":
         return const Icon(Icons.grass, color: Colors.white);
       case "Fruit":
@@ -230,5 +212,74 @@ class MonitoringScreen extends StatelessWidget {
       default:
         return Colors.pink;
     }
+  }
+
+  // Function to count plants by category
+  Map<String, int> _getCategoryCounts(List<Map<String, String>> plants) {
+    final counts = <String, int>{};
+    for (var plant in plants) {
+      final category = plant["category"]!;
+      counts[category] = (counts[category] ?? 0) + 1;
+    }
+    return counts;
+  }
+}
+
+class HorizontalBarChart extends StatelessWidget {
+  final Map<String, int> categoryCounts;
+
+  const HorizontalBarChart({Key? key, required this.categoryCounts})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final maxCount = categoryCounts.values.reduce((a, b) => a > b ? a : b);
+    final chartHeight = 10.0; // Height of each bar
+    final chartWidth = MediaQuery.of(context).size.width * 0.6; // Max bar width
+
+    return Column(
+      children: categoryCounts.entries.map((entry) {
+        final category = entry.key;
+        final count = entry.value;
+        final barWidth = (count / maxCount) * chartWidth;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6.0),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 80,
+                child: Text(
+                  category,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+              ),
+              Stack(
+                children: [
+                  Container(
+                    height: chartHeight,
+                    width: chartWidth,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  Container(
+                    height: chartHeight,
+                    width: barWidth,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 4),
+              Text('$count', style: const TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+        );
+      }).toList(),
+    );
   }
 }
