@@ -7,10 +7,10 @@ class MonitoringScreen extends StatelessWidget {
     {"name": "Cactus", "notes": "Water once a week", "category": "Flower"},
     {"name": "Carrot", "notes": "Keep in humid areas", "category": "Vegetable"},
     {"name": "Mint", "notes": "Trim regularly", "category": "Herb"},
-    {"name": "Violet", "notes": "Trim regularly", "category": "Flower"},
-    {"name": "Hydrangea", "notes": "Trim regularly", "category": "Flower"},
+    {"name": "Violet", "notes": "Water everyday", "category": "Flower"},
+    {"name": "Hydrangea", "notes": "Water every 18 hours", "category": "Flower"},
     {"name": "Hibiscus", "notes": "Trim regularly", "category": "Flower"},
-    {"name": "Lily", "notes": "Trim regularly", "category": "Flower"},
+    {"name": "Lily", "notes": "Water everyday", "category": "Flower"},
     {"name": "Grape", "notes": "Trim regularly", "category": "Fruit"},
   ];
 
