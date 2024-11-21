@@ -6,11 +6,11 @@ import 'screens/home/garden_planner/garden_planner_screen.dart';
 import 'screens/home/garden_manager/garden_manager_screen.dart';
 
 void main() {
-  runApp(GrowPlantsApp());
+  runApp(const GrowPlantsApp());
 }
 
 class GrowPlantsApp extends StatelessWidget {
-  const GrowPlantsApp({Key? key}) : super(key: key);
+  const GrowPlantsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class GrowPlantsApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     MonitoringScreen(),
-    HomeScreen(),
+    const HomeScreen(),
     EncyclopediaScreen(),
   ];
 

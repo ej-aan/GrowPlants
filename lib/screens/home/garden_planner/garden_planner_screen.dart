@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class GardenPlannerScreen extends StatefulWidget {
+  const GardenPlannerScreen({super.key});
+
   @override
   _GardenPlannerScreenState createState() => _GardenPlannerScreenState();
 }

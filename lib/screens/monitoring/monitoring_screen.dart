@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MonitoringScreen extends StatelessWidget {
+  const MonitoringScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +17,8 @@ class MonitoringScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'Garden Overview',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -24,7 +26,7 @@ class MonitoringScreen extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
-              children: [
+              children: const [
                 Card(
                   child: ListTile(
                     title: Text('Water Carrots Today'),

@@ -4,6 +4,8 @@ import 'plant_form.dart';
 import '../../../services/data_service.dart';
 
 class GardenManagerScreen extends StatefulWidget {
+  const GardenManagerScreen({super.key});
+
   @override
   _GardenManagerScreenState createState() => _GardenManagerScreenState();
 }
