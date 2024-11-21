@@ -14,31 +14,36 @@ class _EncyclopediaScreenState extends State<EncyclopediaScreen> {
   final List<Map<String, String>> plants = const [
     {
       'name': 'Rose',
-      'description': 'A symbol of love and passion.',
+      'description':
+          'Bunga mawar yang sangat indah (Deskripsi ini bakal berubah nanti)',
       'imageUrl':
           'https://asset.kompas.com/crops/lwBZvBbN1kkeOhogiKLZusjzGCI=/83x64:1908x1280/750x500/data/photo/2021/01/31/6016a4e1c4716.jpg'
     },
     {
       'name': 'Tulip',
-      'description': 'Known for its beautiful blossoms.',
+      'description':
+          'Bunga tulip yang sangat indah (Deskripsi ini bakal berubah nanti)',
       'imageUrl':
           'https://asset.kompas.com/crops/lwBZvBbN1kkeOhogiKLZusjzGCI=/83x64:1908x1280/750x500/data/photo/2021/01/31/6016a4e1c4716.jpg'
     },
     {
       'name': 'Cactus',
-      'description': 'A resilient desert plant.',
+      'description':
+          'Kaktus yang sangat indah (Deskripsi ini bakal berubah nanti)',
       'imageUrl':
           'https://asset.kompas.com/crops/lwBZvBbN1kkeOhogiKLZusjzGCI=/83x64:1908x1280/750x500/data/photo/2021/01/31/6016a4e1c4716.jpg'
     },
     {
       'name': 'Orchid',
-      'description': 'Elegant and exotic flowers.',
+      'description':
+          'Bunga anggrek yang sangat indah (Deskripsi ini bakal berubah nanti)',
       'imageUrl':
           'https://asset.kompas.com/crops/lwBZvBbN1kkeOhogiKLZusjzGCI=/83x64:1908x1280/750x500/data/photo/2021/01/31/6016a4e1c4716.jpg'
     },
     {
       'name': 'Sunflower',
-      'description': 'Bright and cheerful blooms.',
+      'description':
+          'Bunga matahari yang sangat indah (Deskripsi ini bakal berubah nanti)',
       'imageUrl':
           'https://asset.kompas.com/crops/lwBZvBbN1kkeOhogiKLZusjzGCI=/83x64:1908x1280/750x500/data/photo/2021/01/31/6016a4e1c4716.jpg'
     },
