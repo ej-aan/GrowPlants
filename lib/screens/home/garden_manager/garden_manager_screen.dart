@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'models/plant_model.dart';
+import 'plant_form.dart';
+import '../../../services/data_service.dart';
 
 class GardenManagerScreen extends StatefulWidget {
   @override
@@ -6,7 +9,15 @@ class GardenManagerScreen extends StatefulWidget {
 }
 
 class _GardenManagerScreenState extends State<GardenManagerScreen> {
-  List<Plant> plants = []; // This would be populated from your DataService
+  late List<Plant> plants;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load plants from DataService
+    plants = DataService().plants;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +39,8 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
-              leading: CircleAvatar(
-                backgroundColor: const Color(0xFF5B8E7D),
+              leading: const CircleAvatar(
+                backgroundColor:  Color(0xFF5B8E7D),
                 child: Icon(
                   Icons.eco,
                   color: Colors.white,
@@ -60,80 +71,57 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF8CB369),
+        child: const Icon(Icons.add),
+        onPressed: _addPlant,
+      ),
     );
   }
 
-  void _editPlant(Plant plant) {
-    // TODO: Implement edit functionality
+  void _addPlant() async {
+  await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const PlantForm(),
+    ),
+  );
+  setState(() {}); // Refresh list
+}
+
+
+  void _editPlant(Plant plant) async {
+    await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PlantForm(plant: plant),
+    ),
+  );
+  setState(() {}); // Refresh list
   }
 
   void _deletePlant(Plant plant) {
-    // TODO: Implement delete functionality with confirmation dialog
-  }
-}
-
-// lib/models/plant_model.dart
-class Plant {
-  final String id;
-  String name;
-  String type;
-  String? notes;
-  DateTime dateAdded;
-
-  Plant({
-    required this.id,
-    required this.name,
-    required this.type,
-    this.notes,
-    required this.dateAdded,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'type': type,
-      'notes': notes,
-      'dateAdded': dateAdded.toIso8601String(),
-    };
-  }
-
-  factory Plant.fromJson(Map<String, dynamic> json) {
-    return Plant(
-      id: json['id'],
-      name: json['name'],
-      type: json['type'],
-      notes: json['notes'],
-      dateAdded: DateTime.parse(json['dateAdded']),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Plant'),
+        content: Text('Are you sure you want to delete ${plant.name}?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                DataService().deletePlant(plant.id);
+              });
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
     );
-  }
-}
-
-// lib/services/data_service.dart
-class DataService {
-  static final DataService _instance = DataService._internal();
-  factory DataService() => _instance;
-  DataService._internal();
-
-  final List<Plant> _plants = [];
-
-  List<Plant> get plants => List.unmodifiable(_plants);
-
-  void addPlant(Plant plant) {
-    _plants.add(plant);
-    // TODO: Implement persistence
-  }
-
-  void updatePlant(Plant plant) {
-    final index = _plants.indexWhere((p) => p.id == plant.id);
-    if (index != -1) {
-      _plants[index] = plant;
-      // TODO: Implement persistence
-    }
-  }
-
-  void deletePlant(String id) {
-    _plants.removeWhere((plant) => plant.id == id);
-    // TODO: Implement persistence
   }
 }
