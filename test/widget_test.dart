@@ -6,7 +6,7 @@ import 'package:growplants/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(GrowPlantsApp());
+    await tester.pumpWidget(const GrowPlantsApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

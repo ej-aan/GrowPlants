@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GardenPlannerScreen extends StatefulWidget {
+  const GardenPlannerScreen({super.key});
+
   @override
   _GardenPlannerScreenState createState() => _GardenPlannerScreenState();
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GardenManagerScreen extends StatefulWidget {
+  const GardenManagerScreen({super.key});
+
   @override
   _GardenManagerScreenState createState() => _GardenManagerScreenState();
 }
@@ -28,8 +30,8 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             ),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
-              leading: CircleAvatar(
-                backgroundColor: const Color(0xFF5B8E7D),
+              leading: const CircleAvatar(
+                backgroundColor: Color(0xFF5B8E7D),
                 child: Icon(
                   Icons.eco,
                   color: Colors.white,
