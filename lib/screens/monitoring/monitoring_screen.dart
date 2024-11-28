@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MonitoringScreen extends StatelessWidget {
+class MonitoringScreen extends StatefulWidget {
+  @override
+  _MonitoringScreenState createState() => _MonitoringScreenState();
+}
+
+class _MonitoringScreenState extends State<MonitoringScreen> {
   final List<Map<String, String>> plants = [
     {"name": "Aloe Vera", "notes": "Water every 2 days", "category": "Herb"},
     {"name": "Basil", "notes": "Requires sunlight", "category": "Herb"},
