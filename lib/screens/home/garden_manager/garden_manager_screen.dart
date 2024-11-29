@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models/plant_model.dart';
-import 'plant_form.dart';
+import 'package:growplants/screens/home/garden_planner/garden_planner_screen.dart';  // Menggunakan GardenPlannerScreen untuk penambahan dan pengeditan
 import '../../../services/data_service.dart';
 
 class GardenManagerScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
     // Load plants from DataService
     plants = DataService().plants;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,25 +81,30 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
   }
 
   void _addPlant() async {
+    // Open the GardenPlannerScreen for adding new plant
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const GardenPlannerScreen(),
+      ),
+    );
+    setState(() {}); // Refresh list after adding plant
+  }
+
+  void _editPlant(Plant plant) async {
+  // Open the GardenPlannerScreen for editing an existing plant
   await Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const PlantForm(),
+      builder: (context) => GardenPlannerScreen(
+        // Pass the plant to edit
+        plant: plant,
+      ),
     ),
   );
-  setState(() {}); // Refresh list
+  setState(() {}); // Refresh list after editing plant
 }
 
-
-  void _editPlant(Plant plant) async {
-    await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PlantForm(plant: plant),
-    ),
-  );
-  setState(() {}); // Refresh list
-  }
 
   void _deletePlant(Plant plant) {
     showDialog(
