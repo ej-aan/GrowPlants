@@ -185,7 +185,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                 label: 'Watering Schedule',
                 value: _selectedWaterSchedule,
                 icon: Icons.water_drop,
-                items: ['Once a day', 'Twice a day', 'Every other day', 'Once a week'],
+                items: ['Once a day', 'Twice a day', 'Every other day', 'Once a week', 'Twice a week'],
                 onChanged: (value) {
                   setState(() {
                     _selectedWaterSchedule = value!;

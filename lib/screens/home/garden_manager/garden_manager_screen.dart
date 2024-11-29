@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:growplants/screens/home/garden_manager/plant_form.dart';
 import 'models/plant_model.dart';
 import 'package:growplants/screens/home/garden_planner/garden_planner_screen.dart';  // Menggunakan GardenPlannerScreen untuk penambahan dan pengeditan
 import '../../../services/data_service.dart';
@@ -96,7 +97,7 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
   await Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => GardenPlannerScreen(
+      builder: (context) => PlantForm(
         // Pass the plant to edit
         plant: plant,
       ),
