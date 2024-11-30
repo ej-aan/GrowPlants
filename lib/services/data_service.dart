@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screens/home/garden_manager/models/plant_model.dart';
+import '../models/plant_model.dart';
 
 class DataService {
   static final DataService _instance = DataService._internal();
@@ -47,7 +47,8 @@ class DataService {
 
   Future<void> _savePlants() async {
     final prefs = await SharedPreferences.getInstance();
-    final String jsonString = jsonEncode(_plants.map((plant) => plant.toJson()).toList());
+    final String jsonString =
+        jsonEncode(_plants.map((plant) => plant.toJson()).toList());
     await prefs.setString(_storageKey, jsonString);
   }
 }
