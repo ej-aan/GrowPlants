@@ -3,7 +3,6 @@ import '../../../models/plant_model.dart';
 import 'plant_form.dart';
 import '../../../services/data_service.dart';
 
-
 class GardenManagerScreen extends StatefulWidget {
   const GardenManagerScreen({super.key});
 
@@ -77,16 +76,28 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
     );
   }
 
+  // Method untuk edit tanaman
   void _editPlant(Plant plant) async {
-    await Navigator.push(
+    // Arahkan ke PlantForm dan tunggu hasilnya
+    final updatedPlant = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PlantForm(plant: plant),
       ),
     );
-    setState(() {}); // Refresh list
+
+    // Jika tanaman diperbarui, update list tanaman
+    if (updatedPlant != null) {
+      setState(() {
+        int index = plants.indexWhere((p) => p.id == plant.id);
+        if (index != -1) {
+          plants[index] = updatedPlant; // Update plant
+        }
+      });
+    }
   }
 
+  // Method untuk delete tanaman
   void _deletePlant(Plant plant) {
     showDialog(
       context: context,
@@ -102,6 +113,7 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             onPressed: () {
               setState(() {
                 DataService().deletePlant(plant.id);
+                plants.removeWhere((p) => p.id == plant.id); // Remove plant from list
               });
               Navigator.pop(context);
             },
@@ -112,6 +124,7 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
     );
   }
 
+  // Method untuk menampilkan detail tanaman
   void _showPlantDetails(Plant plant) {
     showDialog(
       context: context,
