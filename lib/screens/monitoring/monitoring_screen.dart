@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:growplants/models/plant_model.dart'; // Pastikan import model Plant
+import 'package:growplants/screens/home/garden_manager/garden_manager_screen.dart';
 
 class MonitoringScreen extends StatefulWidget {
   @override
@@ -6,30 +8,15 @@ class MonitoringScreen extends StatefulWidget {
 }
 
 class _MonitoringScreenState extends State<MonitoringScreen> {
-  final List<Map<String, String>> plants = [
-    {"name": "Aloe Vera", "notes": "Water every 2 days", "category": "Herb"},
-    {"name": "Basil", "notes": "Requires sunlight", "category": "Herb"},
-    {"name": "Cactus", "notes": "Water once a week", "category": "Flower"},
-    {"name": "Carrot", "notes": "Keep in humid areas", "category": "Vegetable"},
-    {"name": "Mint", "notes": "Trim regularly", "category": "Herb"},
-    {"name": "Violet", "notes": "Water everyday", "category": "Flower"},
-    {"name": "Hydrangea", "notes": "Water every 18 hours", "category": "Flower"},
-    {"name": "Hibiscus", "notes": "Trim regularly", "category": "Flower"},
-    {"name": "Lily", "notes": "Water everyday", "category": "Flower"},
-    {"name": "Grape", "notes": "Trim regularly", "category": "Fruit"},
-  ];
+  // List tanaman yang akan ditampilkan
+  List<Plant> plants = [];
 
   @override
   Widget build(BuildContext context) {
-    final categoryCounts = _getCategoryCounts(plants);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF8CB369),
-        title: const Text(
-          "Monitoring",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Monitoring"),
         centerTitle: true,
         elevation: 0,
       ),
@@ -38,46 +25,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Weather, Temperature, and Humidity Monitoring
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildHorizontalMonitoringCard(
-                  icon: Icons.wb_sunny,
-                  label: "Weather",
-                  value: "Sunny",
-                  color: Colors.orange,
-                ),
-                _buildHorizontalMonitoringCard(
-                  icon: Icons.thermostat,
-                  label: "Temp",
-                  value: "25°C",
-                  color: Colors.red,
-                ),
-                _buildHorizontalMonitoringCard(
-                  icon: Icons.water_drop,
-                  label: "Humidity",
-                  value: "60%",
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Grafik Batang Horizontal
-            const Text(
-              'Plant Categories',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 150,
-              child: HorizontalBarChart(categoryCounts: categoryCounts),
-            ),
-
-            const SizedBox(height: 0.1),
-
-            // Plant List Section with Total Plants
+            // Daftar Tanaman
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -86,7 +34,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  'Total: ${plants.length}', // Tambahkan total jumlah tanaman di sini
+                  'Total: ${plants.length}', // Tampilkan jumlah tanaman
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -95,9 +43,9 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 10),
 
-            // Plant List
+            // Daftar Tanaman
             Expanded(
               child: ListView.builder(
                 itemCount: plants.length,
@@ -107,24 +55,11 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 3.0),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: _getCategoryColor(plant["category"]!),
-                        child: _getCategoryIcon(plant["category"]!),
+                        backgroundColor: _getCategoryColor(plant.type),
+                        child: _getCategoryIcon(plant.type),
                       ),
-                      title: Text(plant["name"]!), // Plant name
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(plant["notes"]!), // Plant notes
-                          Text(
-                            "Category: ${plant["category"]}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
+                      title: Text(plant.name),
+                      subtitle: Text(plant.type),
                       trailing: const Icon(Icons.more_vert),
                     ),
                   );
@@ -134,63 +69,29 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  // Helper Widget for Horizontal Monitoring Cards
-  Widget _buildHorizontalMonitoringCard({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
-    return Flexible(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF8CB369),
+        onPressed: () async {
+          final updatedPlants = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GardenManagerScreen(), // Menampilkan halaman GardenManager
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 24, color: color),
-            const SizedBox(width: 8),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          );
+          // Jika ada perubahan pada list tanaman, kita update state
+          if (updatedPlants != null) {
+            setState(() {
+              plants = List<Plant>.from(updatedPlants);
+            });
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  // Helper function to get category icon
-  Widget _getCategoryIcon(String category) {
+  // Helper function untuk icon kategori
+  Icon _getCategoryIcon(String category) {
     switch (category) {
       case "Vegetable":
         return const Icon(Icons.eco, color: Colors.white);
@@ -204,7 +105,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
     }
   }
 
-  // Helper function to get category color
+  // Helper function untuk warna kategori
   Color _getCategoryColor(String category) {
     switch (category) {
       case "Vegetable":
@@ -217,74 +118,5 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
       default:
         return Colors.pink;
     }
-  }
-
-  // Function to count plants by category
-  Map<String, int> _getCategoryCounts(List<Map<String, String>> plants) {
-    final counts = <String, int>{};
-    for (var plant in plants) {
-      final category = plant["category"]!;
-      counts[category] = (counts[category] ?? 0) + 1;
-    }
-    return counts;
-  }
-}
-
-class HorizontalBarChart extends StatelessWidget {
-  final Map<String, int> categoryCounts;
-
-  const HorizontalBarChart({Key? key, required this.categoryCounts})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final maxCount = categoryCounts.values.reduce((a, b) => a > b ? a : b);
-    final chartHeight = 10.0; // Height of each bar
-    final chartWidth = MediaQuery.of(context).size.width * 0.6; // Max bar width
-
-    return Column(
-      children: categoryCounts.entries.map((entry) {
-        final category = entry.key;
-        final count = entry.value;
-        final barWidth = (count / maxCount) * chartWidth;
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 80,
-                child: Text(
-                  category,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    height: chartHeight,
-                    width: chartWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  Container(
-                    height: chartHeight,
-                    width: barWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 4),
-              Text('$count', style: const TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-        );
-      }).toList(),
-    );
   }
 }
