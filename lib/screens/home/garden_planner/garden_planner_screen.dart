@@ -281,7 +281,8 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
       await DataService().addPlant(newPlant);
 
       // Navigate back to the previous screen
-      Navigator.pop(context);
+      // Return the new plant to the previous screen
+    Navigator.pop(context, [newPlant]);  // Pass newPlant data back
     }
   }
 }
