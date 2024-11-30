@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'models/plant_model.dart';
+import '../../../models/plant_model.dart';
 import 'plant_form.dart';
 import '../../../services/data_service.dart';
 
@@ -20,7 +20,6 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
     // Load plants from DataService
     plants = DataService().plants;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: const CircleAvatar(
-                backgroundColor:  Color(0xFF5B8E7D),
+                backgroundColor: Color(0xFF5B8E7D),
                 child: Icon(
                   Icons.eco,
                   color: Colors.white,
@@ -70,37 +69,22 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
                   ),
                 ],
               ),
+              onTap: () => _showPlantDetails(plant), // Show details popup
             ),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF8CB369),
-        child: const Icon(Icons.add),
-        onPressed: _addPlant,
-      ),
     );
   }
 
-  void _addPlant() async {
-  await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const PlantForm(),
-    ),
-  );
-  setState(() {}); // Refresh list
-}
-
-
   void _editPlant(Plant plant) async {
     await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PlantForm(plant: plant),
-    ),
-  );
-  setState(() {}); // Refresh list
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlantForm(plant: plant),
+      ),
+    );
+    setState(() {}); // Refresh list
   }
 
   void _deletePlant(Plant plant) {
@@ -123,6 +107,61 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             },
             child: const Text('Delete'),
           ),
+        ],
+      ),
+    );
+  }
+
+  void _showPlantDetails(Plant plant) {
+    showDialog(
+      context: context,
+      builder: (context) => PlantDetailPopup(plant: plant),
+    );
+  }
+}
+
+class PlantDetailPopup extends StatelessWidget {
+  final Plant plant;
+
+  const PlantDetailPopup({super.key, required this.plant});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title:
+          Text(plant.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDetailRow('Type', plant.type),
+            _buildDetailRow('Size', plant.size),
+            _buildDetailRow('Light Requirement', plant.lightRequirement),
+            _buildDetailRow('Water Requirement', plant.waterRequirement),
+            _buildDetailRow('Soil Requirement', plant.soilRequirement),
+            _buildDetailRow('Growth Status', plant.status),
+            if (plant.notes != null && plant.notes!.isNotEmpty)
+              _buildDetailRow('Notes', plant.notes!),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Expanded(child: Text(value)),
         ],
       ),
     );
