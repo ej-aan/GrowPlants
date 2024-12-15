@@ -4,9 +4,17 @@ import 'screens/home/home_screen.dart';
 import 'screens/encyclopedia/encyclopedia_screen.dart';
 import 'screens/home/garden_planner/garden_planner_screen.dart';
 import 'screens/home/garden_manager/garden_manager_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const GrowPlantsApp());
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensures Flutter bindings are initialized.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions
+        .currentPlatform, // Configures Firebase for the current platform.
+  );
+  runApp(const GrowPlantsApp()); // Launches the main app widget.
 }
 
 class GrowPlantsApp extends StatelessWidget {

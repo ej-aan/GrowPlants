@@ -16,10 +16,16 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
   @override
   void initState() {
     super.initState();
-    // Load plants from DataService
-    plants = DataService().plants;
+    _fetchPlants();
   }
 
+  Future<void> _fetchPlants() async {
+    final dataService = DataService();
+    final fetchedPlants = await dataService.fetchPlants();
+    setState(() {
+      plants = fetchedPlants;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +48,7 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: const CircleAvatar(
-                backgroundColor:  Color(0xFF5B8E7D),
+                backgroundColor: Color(0xFF5B8E7D),
                 child: Icon(
                   Icons.eco,
                   color: Colors.white,
@@ -82,24 +88,23 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
   }
 
   void _addPlant() async {
-  await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const PlantForm(),
-    ),
-  );
-  setState(() {}); // Refresh list
-}
-
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PlantForm(),
+      ),
+    );
+    setState(() {}); // Refresh list
+  }
 
   void _editPlant(Plant plant) async {
     await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PlantForm(plant: plant),
-    ),
-  );
-  setState(() {}); // Refresh list
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlantForm(plant: plant),
+      ),
+    );
+    setState(() {}); // Refresh list
   }
 
   void _deletePlant(Plant plant) {

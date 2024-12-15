@@ -79,6 +79,12 @@ class _PlantFormState extends State<PlantForm> {
           id: DateTime.now().toString(),
           name: name,
           type: type,
+          size: '',
+          light: '',
+          water: '',
+          soil: '',
+          plantingDate: '',
+          status: '',
         ));
       } else {
         widget.plant!

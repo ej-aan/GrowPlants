@@ -1,53 +1,40 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/home/garden_manager/models/plant_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataService {
   static final DataService _instance = DataService._internal();
   factory DataService() => _instance;
   DataService._internal();
 
-  final List<Plant> _plants = [];
-  final String _storageKey = 'plants_data';
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> initialize() async {
-    await _loadPlants();
+  Future<List<Plant>> fetchPlants() async {
+    final snapshot = await _firestore.collection('plants').get();
+    return snapshot.docs.map((doc) => Plant.fromJson(doc.data())).toList();
   }
-
-  List<Plant> get plants => List.unmodifiable(_plants);
 
   Future<void> addPlant(Plant plant) async {
-    _plants.add(plant);
-    await _savePlants();
+    await _firestore.collection('plants').add(plant.toJson());
   }
 
-  Future<void> updatePlant(Plant updatedPlant) async {
-    final index = _plants.indexWhere((p) => p.id == updatedPlant.id);
-    if (index != -1) {
-      _plants[index] = updatedPlant;
-      await _savePlants();
+  Future<void> updatePlant(Plant plant) async {
+    final snapshot = await _firestore
+        .collection('plants')
+        .where('id', isEqualTo: plant.id)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      await snapshot.docs.first.reference.update(plant.toJson());
     }
   }
 
   Future<void> deletePlant(String id) async {
-    _plants.removeWhere((plant) => plant.id == id);
-    await _savePlants();
-  }
-
-  Future<void> _loadPlants() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? storedData = prefs.getString(_storageKey);
-
-    if (storedData != null) {
-      final List<dynamic> jsonData = jsonDecode(storedData);
-      _plants.clear();
-      _plants.addAll(jsonData.map((data) => Plant.fromJson(data)));
+    final snapshot =
+        await _firestore.collection('plants').where('id', isEqualTo: id).get();
+    for (var doc in snapshot.docs) {
+      await doc.reference.delete();
     }
-  }
-
-  Future<void> _savePlants() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String jsonString = jsonEncode(_plants.map((plant) => plant.toJson()).toList());
-    await prefs.setString(_storageKey, jsonString);
   }
 }
