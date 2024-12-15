@@ -16,8 +16,26 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
   @override
   void initState() {
     super.initState();
-    // Load plants from DataService
-    plants = DataService().plants;
+    plants = []; // Initialize as null to handle loading state
+    _fetchPlants();
+  }
+
+  Future<void> _fetchPlants() async {
+    final dataService = DataService();
+    try {
+      final fetchedPlants = await dataService.fetchPlants();
+      setState(() {
+        plants = fetchedPlants;
+      });
+    } catch (error) {
+      // Handle errors during plant fetching
+      setState(() {
+        plants = [];
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load plants: $error')),
+      );
+    }
   }
 
   @override
@@ -150,9 +168,9 @@ class PlantDetailPopup extends StatelessWidget {
           children: [
             _buildDetailRow('Type', plant.type),
             _buildDetailRow('Size', plant.size),
-            _buildDetailRow('Light Requirement', plant.lightRequirement),
-            _buildDetailRow('Water Requirement', plant.waterRequirement),
-            _buildDetailRow('Soil Requirement', plant.soilRequirement),
+            _buildDetailRow('Light Requirement', plant.light),
+            _buildDetailRow('Water Requirement', plant.water),
+            _buildDetailRow('Soil Requirement', plant.soil),
             _buildDetailRow('Growth Status', plant.status),
             if (plant.notes != null && plant.notes!.isNotEmpty)
               _buildDetailRow('Notes', plant.notes!),

@@ -41,9 +41,9 @@ class _PlantFormState extends State<PlantForm> {
     _notesController = TextEditingController(text: widget.plant.notes);
     _selectedType = widget.plant.type;
     _selectedSize = widget.plant.size;
-    _selectedLight = widget.plant.lightRequirement;
-    _selectedWater = widget.plant.waterRequirement;
-    _selectedSoil = widget.plant.soilRequirement;
+    _selectedLight = widget.plant.light;
+    _selectedWater = widget.plant.water;
+    _selectedSoil = widget.plant.soil;
     _selectedStatus = widget.plant.status;
     _plantingDate = widget.plant.plantingDate;
     _image = widget.plant.image != null ? File(widget.plant.image!) : null;
@@ -66,9 +66,9 @@ class _PlantFormState extends State<PlantForm> {
         ..name = _nameController.text
         ..type = _selectedType
         ..size = _selectedSize
-        ..lightRequirement = _selectedLight
-        ..waterRequirement = _selectedWater
-        ..soilRequirement = _selectedSoil
+        ..light = _selectedLight
+        ..water = _selectedWater
+        ..soil = _selectedSoil
         ..status = _selectedStatus
         ..notes = _notesController.text
         ..plantingDate = _plantingDate!
