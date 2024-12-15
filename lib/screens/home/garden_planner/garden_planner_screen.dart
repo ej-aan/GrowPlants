@@ -280,6 +280,15 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
       // Add the new plant to the DataService
       await DataService().addPlant(newPlant);
 
+      // Show a SnackBar notification
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Plant "${newPlant.name}" has been added successfully!'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+
       // Navigate back to the previous screen
       // Return the new plant to the previous screen
       Navigator.pop(context, [newPlant]); // Pass newPlant data back
