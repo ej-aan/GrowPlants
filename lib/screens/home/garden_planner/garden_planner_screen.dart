@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../models/plant_model.dart';
+import '../../../services/data_service.dart';
 import 'dart:io';
 
 class GardenPlannerScreen extends StatefulWidget {
@@ -25,7 +27,8 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
   final Color _iconColor = const Color(0xFF8CB369);
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
@@ -65,14 +68,15 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),              
+              const SizedBox(height: 16),
               ListTile(
                 title: Text(
                   _plantingDate == null
                       ? 'Select Planting Date'
                       : 'Planting Date: ${_plantingDate?.toLocal().toString().split(' ')[0]}',
                 ),
-                trailing: Icon(Icons.calendar_today, color: _iconColor, size: 20),
+                trailing:
+                    Icon(Icons.calendar_today, color: _iconColor, size: 20),
                 onTap: _pickDate,
               ),
               const SizedBox(height: 16),
@@ -87,7 +91,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),              
+              const SizedBox(height: 16),
               _buildDropdownField(
                 label: 'Light Requirement',
                 value: _selectedLight,
@@ -99,7 +103,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),             
+              const SizedBox(height: 16),
               _buildDropdownField(
                 label: 'Water Requirement',
                 value: _selectedWater,
@@ -111,7 +115,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),             
+              const SizedBox(height: 16),
               _buildDropdownField(
                 label: 'Soil Requirement',
                 value: _selectedSoil,
@@ -123,14 +127,14 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),             
+              const SizedBox(height: 16),
               _buildTextField(
                 controller: _notesController,
                 label: 'Notes / Care Tips',
                 icon: Icons.notes,
                 maxLines: 3,
               ),
-              const SizedBox(height: 16),             
+              const SizedBox(height: 16),
               _buildDropdownField(
                 label: 'Growth Status',
                 value: _selectedStatus,
@@ -142,7 +146,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 16),              
+              const SizedBox(height: 16),
               _image == null
                   ? TextButton.icon(
                       onPressed: _pickImage,
@@ -159,7 +163,6 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
                       ],
                     ),
               const SizedBox(height: 24),
-             
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFF4A259),
@@ -242,7 +245,6 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
     );
   }
 
-  
   Future<void> _pickDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -257,11 +259,30 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
     }
   }
 
-  
-  void _savePlant() {
+  void _savePlant() async {
     if (_formKey.currentState?.validate() ?? false) {
-      
-      Navigator.pop(context);
+      // Create a new Plant object with form data
+      final newPlant = Plant(
+        id: DateTime.now().toString(), // Unique ID for the new plant
+        name: _nameController.text,
+        type: _selectedType,
+        size: _selectedSize,
+        lightRequirement: _selectedLight,
+        waterRequirement: _selectedWater,
+        soilRequirement: _selectedSoil,
+        status: _selectedStatus,
+        plantingDate:
+            _plantingDate ?? DateTime.now(), // Default if no date is selected
+        notes: _notesController.text,
+        image: _image?.path, // Store image path if an image is selected
+      );
+
+      // Add the new plant to the DataService
+      await DataService().addPlant(newPlant);
+
+      // Navigate back to the previous screen
+      // Return the new plant to the previous screen
+      Navigator.pop(context, [newPlant]); // Pass newPlant data back
     }
   }
 }
