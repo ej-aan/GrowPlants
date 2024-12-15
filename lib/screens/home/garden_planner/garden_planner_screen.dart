@@ -267,9 +267,9 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
         name: _nameController.text,
         type: _selectedType,
         size: _selectedSize,
-        lightRequirement: _selectedLight,
-        waterRequirement: _selectedWater,
-        soilRequirement: _selectedSoil,
+        light: _selectedLight,
+        water: _selectedWater,
+        soil: _selectedSoil,
         status: _selectedStatus,
         plantingDate:
             _plantingDate ?? DateTime.now(), // Default if no date is selected
@@ -282,7 +282,7 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
 
       // Navigate back to the previous screen
       // Return the new plant to the previous screen
-    Navigator.pop(context, [newPlant]);  // Pass newPlant data back
+      Navigator.pop(context, [newPlant]); // Pass newPlant data back
     }
   }
 }

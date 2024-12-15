@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "356971754168",
+    "project_id": "growplants-48745",
+    "storage_bucket": "growplants-48745.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356971754168:android:754feb6430f0e15b103a4d",
+        "android_client_info": {
+          "package_name": "com.growplants.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuSpnH86Qs6xyYWYq28tSbzBcPO8hgMR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
