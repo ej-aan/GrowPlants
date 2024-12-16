@@ -10,19 +10,16 @@ class DataService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<Plant> _plants = [];
-  final String _collectionKey = 'plants'; // Firestore collection name
 
   // Get the current user's UID
   String? get _userId => _auth.currentUser?.uid;
 
-  /// Initializes the service by loading plants from Firestore
   Future<void> initialize() async {
     await _loadPlants();
   }
 
   List<Plant> get plants => List.unmodifiable(_plants);
 
-  /// Adds a new plant to Firestore
   Future<void> addPlant(Plant plant) async {
     if (_userId == null) return; // Make sure the user is logged in
 
@@ -34,7 +31,6 @@ class DataService {
         id: docRef.id)); // Add to the local list with Firestore ID
   }
 
-  /// Updates an existing plant in Firestore
   Future<void> updatePlant(Plant updatedPlant) async {
     if (_userId == null) return; // Pastikan user sudah login
 
@@ -49,7 +45,6 @@ class DataService {
     print("Plant updated in Firestore");
   }
 
-  /// Deletes a plant from Firestore
   Future<void> deletePlant(String id) async {
     if (_userId == null) return; // Make sure the user is logged in
 
