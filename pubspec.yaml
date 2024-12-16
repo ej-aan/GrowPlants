@@ -44,6 +44,7 @@ dependencies:
   firebase_auth: ^5.3.4
   cloud_firestore: ^5.5.1
   http: ^1.2.2
+  firebase_storage: ^12.3.7
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,17 @@ flutter:
     - assets/tulip.jpg
     - assets/orchid.jpg
     - assets/sunflower.jpg
+    - assets/alpukat.jpg
+    - assets/sawi.jpg
+    - assets/trembesi.jpg
+    - assets/maple-jepang.jpg
+    - assets/mangga.jpg
+    - assets/serai.jpg
+    - assets/sirih.jpg
+    - assets/ketapang.jpg
+    - assets/rambutan.jpg
+    - assets/salam.jpg
+    - assets/brokoli.jpeg
 
   #   - images/a_dot_ham.jpeg
 

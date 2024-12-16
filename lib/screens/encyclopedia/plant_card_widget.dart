@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'plant_detail.dart';
 
 class PlantGrid extends StatelessWidget {
   final List<Map<String, String>> plants;
@@ -42,14 +43,13 @@ class PlantGrid extends StatelessWidget {
                       topRight: Radius.circular(12),
                     ),
                     image: DecorationImage(
-                      image: AssetImage(
-                          'assets/${plant['name']!.toLowerCase()}.jpg'),
+                      image: AssetImage(plant['imageAsset']!),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Text(
                     plant['name']!,
                     textAlign: TextAlign.center,
@@ -69,21 +69,17 @@ class PlantGrid extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(plant['name']!),
-                          content: Text(plant['description']!),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Close'),
-                            ),
-                          ],
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlantDetailScreen(plant: plant),
                         ),
                       );
                     },
-                    child: const Text('Learn More'),
+                    child: const Text(
+                      'Learn More',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],
