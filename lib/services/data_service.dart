@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/plant_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DataService {
   static final DataService _instance = DataService._internal();
@@ -7,8 +8,12 @@ class DataService {
   DataService._internal();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<Plant> _plants = [];
   final String _collectionKey = 'plants'; // Firestore collection name
+
+  // Get the current user's UID
+  String? get _userId => _auth.currentUser?.uid;
 
   /// Initializes the service by loading plants from Firestore
   Future<void> initialize() async {
@@ -19,35 +24,53 @@ class DataService {
 
   /// Adds a new plant to Firestore
   Future<void> addPlant(Plant plant) async {
-    // Add to Firestore
-    final docRef =
-        await _firestore.collection(_collectionKey).add(plant.toJson());
+    if (_userId == null) return; // Make sure the user is logged in
 
-    // Update the local list with Firestore ID
-    _plants.add(plant.copyWith(id: docRef.id));
+    final userPlantCollection =
+        _firestore.collection('users').doc(_userId).collection('plants');
+    final docRef = await userPlantCollection.add(plant.toJson());
+
+    _plants.add(plant.copyWith(
+        id: docRef.id)); // Add to the local list with Firestore ID
   }
 
   /// Updates an existing plant in Firestore
   Future<void> updatePlant(Plant updatedPlant) async {
-    final index = _plants.indexWhere((p) => p.id == updatedPlant.id);
-    if (index != -1) {
-      await _firestore
-          .collection(_collectionKey)
-          .doc(updatedPlant.id)
-          .update(updatedPlant.toJson());
-      _plants[index] = updatedPlant;
-    }
+    if (_userId == null) return; // Pastikan user sudah login
+
+    // Update data di Firestore
+    await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('plants')
+        .doc(updatedPlant.id)
+        .update(updatedPlant.toJson());
+
+    print("Plant updated in Firestore");
   }
 
   /// Deletes a plant from Firestore
   Future<void> deletePlant(String id) async {
-    await _firestore.collection(_collectionKey).doc(id).delete();
+    if (_userId == null) return; // Make sure the user is logged in
+
+    await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('plants')
+        .doc(id)
+        .delete();
     _plants.removeWhere((plant) => plant.id == id);
   }
 
-  /// Loads plants from Firestore
+  /// Loads plants from Firestore for the current user
   Future<void> _loadPlants() async {
-    final snapshot = await _firestore.collection(_collectionKey).get();
+    if (_userId == null) return; // Make sure the user is logged in
+
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('plants')
+        .get();
 
     _plants.clear();
     _plants.addAll(
@@ -57,8 +80,16 @@ class DataService {
     );
   }
 
+  /// Fetches the current user's plants from Firestore
   Future<List<Plant>> fetchPlants() async {
-    final snapshot = await _firestore.collection('plants').get();
+    if (_userId == null) return []; // Make sure the user is logged in
+
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(_userId)
+        .collection('plants')
+        .get();
+
     return snapshot.docs.map((doc) {
       return Plant.fromJson({...doc.data(), 'id': doc.id});
     }).toList();

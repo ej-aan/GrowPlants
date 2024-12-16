@@ -3,7 +3,7 @@ import 'search_widget.dart';
 import 'plant_card_widget.dart';
 
 class EncyclopediaScreen extends StatefulWidget {
-  const EncyclopediaScreen({super.key});
+  const EncyclopediaScreen({super.key}); // Add key to the constructor
 
   @override
   State<EncyclopediaScreen> createState() => _EncyclopediaScreenState();
@@ -60,15 +60,6 @@ class _EncyclopediaScreenState extends State<EncyclopediaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF8CB369),
-        title: const Text(
-          "Plant Encyclopedia",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
       body: Column(
         children: [
           SearchWidget(onSearch: updateSearchQuery),

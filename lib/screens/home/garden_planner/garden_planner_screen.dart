@@ -283,7 +283,8 @@ class _GardenPlannerScreenState extends State<GardenPlannerScreen> {
       // Show a SnackBar notification
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Plant "${newPlant.name}" has been added successfully!'),
+          content:
+              Text('Plant "${newPlant.name}" has been added successfully!'),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 3),
         ),

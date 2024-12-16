@@ -104,14 +104,9 @@ class _GardenManagerScreenState extends State<GardenManagerScreen> {
       ),
     );
 
-    // Jika tanaman diperbarui, update list tanaman
+    // Jika tanaman diperbarui, fetch ulang data dari Firestore
     if (updatedPlant != null) {
-      setState(() {
-        int index = plants.indexWhere((p) => p.id == plant.id);
-        if (index != -1) {
-          plants[index] = updatedPlant; // Update plant
-        }
-      });
+      await _fetchPlants(); // Reload plants list from Firestore
     }
   }
 
