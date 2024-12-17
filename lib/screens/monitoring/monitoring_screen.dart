@@ -212,15 +212,86 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
     );
   }
 
-  // Plant Card UI
+// Function to get plant-specific icons
+  IconData _getPlantIcon(String type) {
+    switch (type.toLowerCase()) {
+      case 'tree':
+        return Icons.forest; // Tree icon
+      case 'flower':
+        return Icons.local_florist; // Flower icon
+      case 'vegetable':
+        return Icons.eco; // Vegetable icon
+      case 'fruit':
+        return Icons.apple; // Fruit icon
+      case 'herb':
+        return Icons.spa; // Herb icon
+      default:
+        return Icons.grass; // Default icon
+    }
+  }
+
+// Function to get plant-specific colors
+  Color _getPlantColor(String type) {
+    switch (type.toLowerCase()) {
+      case 'tree':
+        return Colors.brown; // Brown for Tree
+      case 'flower':
+        return Colors.pink; // Pink for Flower
+      case 'vegetable':
+        return Colors.green; // Green for Vegetable
+      case 'fruit':
+        return Colors.red; // Red for Fruit
+      case 'herb':
+        return Colors.teal; // Teal for Herb
+      default:
+        return Colors.grey; // Default color
+    }
+  }
+
+// Plant Card UI
   Widget _buildPlantCard(Plant plant) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: const Icon(Icons.eco, color: Colors.green),
-        title: Text(plant.name),
-        subtitle: Text('Type: ${plant.type} | Status: ${plant.status}'),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6.0), // Adjust card spacing
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.purple[50], // Light purple background
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Icon
+          Icon(
+            _getPlantIcon(plant.type),
+            color: _getPlantColor(plant.type),
+            size: 32,
+          ),
+          const SizedBox(width: 12),
+
+          // Plant Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  plant.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${plant.type} | ${plant.status}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
